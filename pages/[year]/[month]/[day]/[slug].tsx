@@ -9,19 +9,18 @@ import Layout from "../../../../components/layout";
 import { useRouter } from "next/router";
 import LocalDate from "../../../../components/date";
 import Head from "next/head";
+import instance from "../../../../agent";
 
 export const getStaticPaths: GetStaticPaths = async (
   context: GetStaticPathsContext
 ) => {
-  const posts = await (
-    await fetch("https://www.lemonos.org/wp-json/wp/v2/posts?_fields=date,slug")
-  ).json();
+  const posts = (await instance.get('https://api.lemonos.org/wp-json/wp/v2/posts?_fields=date,slug')).data;
+
   return {
     paths: posts.map((post) => {
       const date = new Date(post.date);
-      return `/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/${
-        post.slug
-      }`;
+      return `/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/${post.slug
+        }`;
     }),
     fallback: true,
   };
@@ -48,15 +47,13 @@ export const getStaticProps: GetStaticProps = async (
       `after=${after}`,
       `slug=${encodeURIComponent(context.params.slug.toString())}`,
     ];
-    const postData: PostProps[] = await (
-      await fetch(
-        `https://www.lemonos.org/wp-json/wp/v2/posts/?` + params.join("&")
-      )
-    ).json();
+    const postData: PostProps[] = (await instance.get(`https://api.lemonos.org/wp-json/wp/v2/posts/?` + params.join("&"))).data
+
     return postData.length == 1
       ? { props: { ...postData[0] } }
       : { notFound: true };
   } catch (err) {
+    console.error(err)
     return { notFound: true };
   }
 };

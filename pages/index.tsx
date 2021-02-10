@@ -7,6 +7,7 @@ import Link from "next/link";
 import sanitizeHtml from "sanitize-html";
 import LocalDate from "../components/date";
 import Image from "next/image";
+import instance from "../agent";
 
 interface Post {
   id: number;
@@ -21,11 +22,7 @@ interface ListingProps {
 }
 
 export const getStaticProps: GetStaticProps<ListingProps> = async (context) => {
-  const posts: Post[] = await (
-    await fetch(
-      "https://www.lemonos.org/wp-json/wp/v2/posts?_fields=id,slug,title,excerpt,date"
-    )
-  ).json();
+  const posts: Post[] = (await (instance.get('https://api.lemonos.org/wp-json/wp/v2/posts?_fields=id,slug,title,excerpt,date'))).data;
   return { props: { posts }, revalidate: 3600 };
 };
 
@@ -48,15 +45,13 @@ const Home: FunctionComponent<ListingProps> = (props) => (
         const date = new Date(post.date);
         return (
           <Link
-            href={`/${date.getFullYear()}/${
-              date.getMonth() + 1
-            }/${date.getDate()}/${post.slug}`}
+            href={`/${date.getFullYear()}/${date.getMonth() + 1
+              }/${date.getDate()}/${post.slug}`}
             key={post.id}
           >
             <a
-              className={`mx-auto block py-8 md:py-16 bg-white transform transition-all cursor-pointer ${
-                n + 1 < props.posts.length ? "border-b-2" : ""
-              }`}
+              className={`mx-auto block py-8 md:py-16 bg-white transform transition-all cursor-pointer ${n + 1 < props.posts.length ? "border-b-2" : ""
+                }`}
             >
               <h2 className="mx-auto px-6 max-w-screen-md text-3xl sm:text-5xl font-semibold mb-4">
                 {post.title?.rendered}

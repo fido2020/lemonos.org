@@ -9,7 +9,10 @@
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.4.0",
+    "@types/node-fetch": "^2.5.8",
     "autoprefixer": "^10.2.4",
+    "axios": "^0.21.1",
+    "http-proxy-middleware": "^1.0.6",
     "next": "10.0.6",
     "postcss": "^8.2.5",
     "react": "17.0.1",
