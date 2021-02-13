@@ -14,7 +14,7 @@ export const getStaticPaths: GetStaticPaths = async (
   context: GetStaticPathsContext
 ) => {
   const posts = await (
-    await fetch("https://www.lemonos.org/wp-json/wp/v2/posts?_fields=date,slug")
+    await fetch("https://api.lemonos.org/wp-json/wp/v2/posts?_fields=date,slug")
   ).json();
   return {
     paths: posts.map((post) => {
@@ -50,7 +50,7 @@ export const getStaticProps: GetStaticProps = async (
     ];
     const postData: PostProps[] = await (
       await fetch(
-        `https://www.lemonos.org/wp-json/wp/v2/posts/?` + params.join("&")
+        `https://api.lemonos.org/wp-json/wp/v2/posts/?` + params.join("&")
       )
     ).json();
     return postData.length == 1
