@@ -12,10 +12,19 @@ module.exports = {
         return [{
             source: '/wp-content/:path*',
             headers: [{
-                key: 'cache-control',
+                key: 'Cache-Control',
                 value: 'public, max-age=604800, immutable'
             }, {
-                key: 'content-security-policy',
+                key: 'Content-Security-Policy',
+                value: "default-src 'none'"
+            }]
+        }, {
+            source: '/api/api-proxy/:path*',
+            headers: [{
+                key: 'Cache-Control',
+                value: 'public, max-age=604800, immutable'
+            }, {
+                key: 'Content-Security-Policy',
                 value: "default-src 'none'"
             }]
         }]
