@@ -14,8 +14,9 @@ import instance from "../../../../agent";
 export const getStaticPaths: GetStaticPaths = async (
   context: GetStaticPathsContext
 ) => {
-  const posts = (await instance.get('https://api.lemonos.org/wp-json/wp/v2/posts?_fields=date,slug')).data;
-
+  const posts = await (
+    await fetch("https://api.lemonos.org/wp-json/wp/v2/posts?_fields=date,slug")
+  ).json();
   return {
     paths: posts.map((post) => {
       const date = new Date(post.date);

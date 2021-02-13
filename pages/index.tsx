@@ -22,7 +22,11 @@ interface ListingProps {
 }
 
 export const getStaticProps: GetStaticProps<ListingProps> = async (context) => {
-  const posts: Post[] = (await (instance.get('https://api.lemonos.org/wp-json/wp/v2/posts?_fields=id,slug,title,excerpt,date'))).data;
+  const posts: Post[] = await (
+    await fetch(
+      "https://api.lemonos.org/wp-json/wp/v2/posts?_fields=id,slug,title,excerpt,date"
+    )
+  ).json();
   return { props: { posts }, revalidate: 3600 };
 };
 
