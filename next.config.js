@@ -3,10 +3,21 @@ module.exports = {
     defaultLocale: 'en-AU',
     async rewrites() {
         return [
-            { source: '/wp-content', destination: '/api/api-proxy/wp-content'},
-            { source: '/wp-admin/:id*', destination: '/api/api-proxy/wp-admin/:id*'},
-            { source: '/wp-content', destination: '/api/api-proxy/wp-content'},
-            { source: '/wp-admin/:id*', destination: '/api/api-proxy/wp-admin/:id*'},
+            { source: '/wp-:n', destination: '/api/api-proxy/wp-:n' },
+            { source: '/wp-:n/:id*', destination: '/api/api-proxy/wp-:n/:id*' },
+            { source: '/wp/:id*', destination: '/api/api-proxy/wp/:id*' },
         ]
+    },
+    async headers() {
+        return [{
+            source: '/wp-content/:path*',
+            headers: [{
+                key: 'cache-control',
+                value: 'public, max-age=604800, immutable'
+            }, {
+                key: 'content-security-policy',
+                value: "default-src 'none'"
+            }]
+        }]
     }
 }
