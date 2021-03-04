@@ -4,7 +4,7 @@ import {
   GetStaticProps,
   GetStaticPropsContext,
 } from "next";
-import Layout from "../../../../components/layout";
+import Layout from "../../../../components/layout"; import { motion } from "framer-motion";
 
 import { useRouter } from "next/router";
 import LocalDate from "../../../../components/date";
@@ -29,6 +29,7 @@ export const getStaticPaths: GetStaticPaths = async (
 
 interface PostProps {
   date: string;
+  id: number;
   title: { rendered: string };
   content: { rendered: string };
   excerpt: { rendered: string };
@@ -44,7 +45,7 @@ export const getStaticProps: GetStaticProps = async (
       "per_page=1",
       "orderby=date",
       "order=asc",
-      "_fields=title.rendered,content.rendered,date,excerpt",
+      "_fields=id,title.rendered,content.rendered,date,excerpt",
       `after=${after}`,
       `slug=${encodeURIComponent(context.params.slug.toString())}`,
     ];
@@ -101,19 +102,21 @@ const PostPage: React.FunctionComponent<PostProps> = (props) => {
         <title>{props.title?.rendered}</title>
         <meta name="description" content={props.excerpt?.rendered} />
       </Head>
-      <div className="max-w-screen-md mx-auto p-4 md:py-8">
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold mb-4">
+      <motion.div className="max-w-screen-md mx-auto p-4 md:py-8 bg-white" layoutId={`post-${props.id}`}>
+        <motion.h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold mb-4" layoutId={`post-${props.id}-title`}>
           <span dangerouslySetInnerHTML={{ __html: props.title?.rendered }} />
-        </h1>
-        <p className="text-xl">
+        </motion.h1>
+        <motion.p className="text-xl" layoutId={`post-${props.id}-date`}>
           <LocalDate date={new Date(props.date)} />
-        </p>
-        <div className={"prose max-w-none"}>
+        </motion.p>
+        <motion.div className={"prose max-w-none"} initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}>
           <article
             dangerouslySetInnerHTML={{ __html: props.content?.rendered }}
           />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </Layout>
   );
 };
