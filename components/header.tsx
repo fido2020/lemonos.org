@@ -40,11 +40,11 @@ const Header: React.FunctionComponent<{ hideLogo?: boolean }> = ({
             </a>
           </Link>
           <a
-            href="https://www.github.com/fido2020/Lemon-OS"
+            href="https://github.com/LemonOSProject/LemonOS"
             className="flex w-20 h-20 p-6 hover:bg-gray-100"
             title='View on GitHub'
           >
-            <img src="/github.svg" alt='Github Icon'/>
+            <img src="/github.svg" alt='GitHub Icon'/>
           </a>
         </div>
       </header>
